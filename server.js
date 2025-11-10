@@ -90,6 +90,12 @@ app.use("/api/admin/dashboard", dashboardRoute);
 app.use("/backend/dashboard", dashboardRoute); // Backend alias
 
 // Global Error Handling middelware
+// Basic root and favicon handlers to avoid 404s for health checks or browsers
+app.get("/", (req, res) => {
+  return res.json({ status: "success", message: "Ecommerce backend is running" });
+});
+
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 app.all(/.*/, (req, res, next) => {
   next(new ApiError(`can't find this route: ${req.originalUrl}`, 404));
