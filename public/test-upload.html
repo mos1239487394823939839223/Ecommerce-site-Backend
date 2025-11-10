@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+        
+        .preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .message {
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .gallery {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .gallery h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .gallery-grid img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .note {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 25px;
+        }
+        
+        .note h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .note ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .note code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Image Upload Testing</h1>
+        
+        <div class="cards">
+            <!-- Category Upload -->
+            <div class="card">
+                <h2>📁 Category Image</h2>
+                <div class="form-group">
+                    <label for="categoryId">Category ID:</label>
+                    <input type="text" id="categoryId" placeholder="Enter category ID">
+                </div>
+                <div class="form-group">
+                    <label for="categoryImage">Select Image:</label>
+                    <input type="file" id="categoryImage" accept="image/*">
+                </div>
+                <button onclick="uploadCategoryImage()">Upload Category Image</button>
+                <div class="preview" id="categoryPreview"></div>
+            </div>
+            
+            <!-- Brand Upload -->
+            <div class="card">
+                <h2>🏷️ Brand Image</h2>
+                <div class="form-group">
+                    <label for="brandId">Brand ID:</label>
+                    <input type="text" id="brandId" placeholder="Enter brand ID">
+                </div>
+                <div class="form-group">
+                    <label for="brandImage">Select Image:</label>
+                    <input type="file" id="brandImage" accept="image/*">
+                </div>
+                <button onclick="uploadBrandImage()">Upload Brand Image</button>
+                <div class="preview" id="brandPreview"></div>
+            </div>
+            
+            <!-- Product Single Image Upload -->
+            <div class="card">
+                <h2>📦 Product Cover Image</h2>
+                <div class="form-group">
+                    <label for="productId">Product ID:</label>
+                    <input type="text" id="productId" placeholder="Enter product ID">
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Select Image:</label>
+                    <input type="file" id="productImage" accept="image/*">
+                </div>
+                <button onclick="uploadProductImage()">Upload Product Image</button>
+                <div class="preview" id="productPreview"></div>
+            </div>
+        </div>
+        
+        <!-- Product Multiple Images -->
+        <div class="gallery">
+            <h2>🖼️ Product Gallery (Multiple Images)</h2>
+            <div class="form-group">
+                <label for="productGalleryId">Product ID:</label>
+                <input type="text" id="productGalleryId" placeholder="Enter product ID">
+            </div>
+            <div class="form-group">
+                <label for="productImages">Select Multiple Images (Max 10):</label>
+                <input type="file" id="productImages" accept="image/*" multiple>
+            </div>
+            <button onclick="uploadProductImages()">Upload Product Gallery</button>
+            <div class="preview" id="galleryPreview"></div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="note">
+            <h3>📝 Instructions:</h3>
+            <ul>
+                <li>First, create a category/brand/product using Postman or your API client</li>
+                <li>Copy the returned ID and paste it in the appropriate field above</li>
+                <li>Select an image file (jpeg, jpg, png, gif, webp)</li>
+                <li>Click upload and the image will be saved with a serial number</li>
+                <li>Images are stored in <code>/uploads/{entity}/{serial}.ext</code></li>
+                <li>You can preview the uploaded image immediately</li>
+                <li>Maximum file size: 5MB per image</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api/v1';
+        
+        async function uploadCategoryImage() {
+            const id = document.getElementById('categoryId').value;
+            const file = document.getElementById('categoryImage').files[0];
+            const preview = document.getElementById('categoryPreview');
+            
+            if (!id || !file) {
+                preview.innerHTML = '<div class="message error">Please provide both Category ID and Image file</div>';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE}/categories/${id}/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    preview.innerHTML = `
+                        <div class="message success">✅ Upload Successful!</div>
+                        <p><strong>Image URL:</strong> ${data.data.imageUrl}</p>
+                        <img src="${data.data.imageUrl}" alt="Category Image">
+                    `;
+                } else {
+                    preview.innerHTML = `<div class="message error">❌ ${data.message || 'Upload failed'}</div>`;
+                }
+            } catch (error) {
+                preview.innerHTML = `<div class="message error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function uploadBrandImage() {
+            const id = document.getElementById('brandId').value;
+            const file = document.getElementById('brandImage').files[0];
+            const preview = document.getElementById('brandPreview');
+            
+            if (!id || !file) {
+                preview.innerHTML = '<div class="message error">Please provide both Brand ID and Image file</div>';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE}/brands/${id}/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    preview.innerHTML = `
+                        <div class="message success">✅ Upload Successful!</div>
+                        <p><strong>Image URL:</strong> ${data.data.imageUrl}</p>
+                        <img src="${data.data.imageUrl}" alt="Brand Image">
+                    `;
+                } else {
+                    preview.innerHTML = `<div class="message error">❌ ${data.message || 'Upload failed'}</div>`;
+                }
+            } catch (error) {
+                preview.innerHTML = `<div class="message error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function uploadProductImage() {
+            const id = document.getElementById('productId').value;
+            const file = document.getElementById('productImage').files[0];
+            const preview = document.getElementById('productPreview');
+            
+            if (!id || !file) {
+                preview.innerHTML = '<div class="message error">Please provide both Product ID and Image file</div>';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE}/products/${id}/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    preview.innerHTML = `
+                        <div class="message success">✅ Upload Successful!</div>
+                        <p><strong>Image URL:</strong> ${data.data.imageUrl}</p>
+                        <img src="${data.data.imageUrl}" alt="Product Image">
+                    `;
+                } else {
+                    preview.innerHTML = `<div class="message error">❌ ${data.message || 'Upload failed'}</div>`;
+                }
+            } catch (error) {
+                preview.innerHTML = `<div class="message error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function uploadProductImages() {
+            const id = document.getElementById('productGalleryId').value;
+            const files = document.getElementById('productImages').files;
+            const preview = document.getElementById('galleryPreview');
+            const grid = document.getElementById('galleryGrid');
+            
+            if (!id || files.length === 0) {
+                preview.innerHTML = '<div class="message error">Please provide Product ID and at least one Image file</div>';
+                return;
+            }
+            
+            if (files.length > 10) {
+                preview.innerHTML = '<div class="message error">Maximum 10 images allowed</div>';
+                return;
+            }
+            
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/products/${id}/images`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    preview.innerHTML = `
+                        <div class="message success">✅ Upload Successful! ${data.data.imageUrls.length} images uploaded</div>
+                    `;
+                    
+                    grid.innerHTML = data.data.imageUrls.map(url => 
+                        `<img src="${url}" alt="Product Gallery Image">`
+                    ).join('');
+                } else {
+                    preview.innerHTML = `<div class="message error">❌ ${data.message || 'Upload failed'}</div>`;
+                }
+            } catch (error) {
+                preview.innerHTML = `<div class="message error">❌ Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
+

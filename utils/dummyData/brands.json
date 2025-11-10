@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Apple",
+    "slug": "apple",
+    "image": "https://images.unsplash.com/photo-1621768216002-5ac171876625?w=200&h=200&fit=crop"
+  },
+  {
+    "name": "Samsung",
+    "slug": "samsung",
+    "image": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop"
+  },
+  {
+    "name": "Nike",
+    "slug": "nike",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop"
+  },
+  {
+    "name": "Adidas",
+    "slug": "adidas",
+    "image": "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=200&h=200&fit=crop"
+  },
+  {
+    "name": "Sony",
+    "slug": "sony",
+    "image": "https://images.unsplash.com/photo-1614624532983-4ce03382d63d?w=200&h=200&fit=crop"
+  },
+  {
+    "name": "Dell",
+    "slug": "dell",
+    "image": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=200&h=200&fit=crop"
+  }
+]

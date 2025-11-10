@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Featured Products",
+    "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop",
+    "link": "/products",
+    "isActive": true,
+    "order": 1
+  },
+  {
+    "name": "Electronics",
+    "image": "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=600&fit=crop",
+    "link": "/categories/electronics",
+    "isActive": true,
+    "order": 2
+  },
+  {
+    "name": "Fashion",
+    "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=600&fit=crop",
+    "link": "/categories/fashion",
+    "isActive": true,
+    "order": 3
+  },
+  {
+    "name": "Home & Garden",
+    "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+    "link": "/categories/home",
+    "isActive": true,
+    "order": 4
+  },
+  {
+    "name": "Sports",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
+    "link": "/categories/sports",
+    "isActive": true,
+    "order": 5
+  },
+  {
+    "name": "Beauty",
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=600&fit=crop",
+    "link": "/categories/beauty",
+    "isActive": true,
+    "order": 6
+  },
+  {
+    "name": "Summer Sale",
+    "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&h=600&fit=crop",
+    "link": "/products?discount=true",
+    "isActive": true,
+    "order": 7
+  },
+  {
+    "name": "New Arrivals",
+    "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&h=600&fit=crop",
+    "link": "/products?sort=-createdAt",
+    "isActive": true,
+    "order": 8
+  }
+]
