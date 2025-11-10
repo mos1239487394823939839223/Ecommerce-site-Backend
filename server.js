@@ -92,7 +92,10 @@ app.use("/backend/dashboard", dashboardRoute); // Backend alias
 // Global Error Handling middelware
 // Basic root and favicon handlers to avoid 404s for health checks or browsers
 app.get("/", (req, res) => {
-  return res.json({ status: "success", message: "Ecommerce backend is running" });
+  return res.json({
+    status: "success",
+    message: "Ecommerce backend is running",
+  });
 });
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
@@ -104,29 +107,27 @@ app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
 
-// If this module is run directly (node server.js), start the server and connect DB.
+// Connect to database immediately for both serverless and traditional deployments
+dbConnection().catch((err) => {
+  console.error("Failed to connect to DB:", err);
+  // In serverless, we don't exit - just log the error
+  // The app will still export but DB operations will fail
+});
+
+// If this module is run directly (node server.js), start the server
 if (require.main === module) {
-  (async () => {
-    try {
-      await dbConnection();
-    } catch (err) {
-      console.error("Failed to connect to DB. Exiting.", err);
+  const server = app.listen(PORT, () => {
+    console.log(`The app is running on port ${PORT}`);
+  });
+
+  // unhandled rejection error outside express
+  process.on("unhandledRejection", (err) => {
+    console.error(`Unhandled Rejection Error: ${err.name} : ${err.message}`);
+    console.error(`Shutting down the server...`);
+    server.close(() => {
       process.exit(1);
-    }
-
-    const server = app.listen(PORT, () => {
-      console.log(`The app is running on port ${PORT}`);
     });
-
-    // unhandled rejection error outside express
-    process.on("unhandledRejection", (err) => {
-      console.error(`Unhandled Rejection Error: ${err.name} : ${err.message}`);
-      console.error(`Shutting down the server...`);
-      server.close(() => {
-        process.exit(1);
-      });
-    });
-  })();
+  });
 }
 
 // Export the app for testing or to be imported by serverless wrappers

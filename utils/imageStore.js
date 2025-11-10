@@ -19,11 +19,17 @@ function resolveUploadsRoot() {
     const fallback = path.join(os.tmpdir(), "uploads");
     try {
       fs.mkdirSync(fallback, { recursive: true });
-      console.warn(`Uploads directory '${preferred}' is not writable; using fallback '${fallback}'.`);
+      console.warn(
+        `Uploads directory '${preferred}' is not writable; using fallback '${fallback}'.`
+      );
       return fallback;
     } catch (err2) {
       // As a last resort, log and rethrow — but keep the error informative.
-      console.error("Failed to create uploads directory in both preferred and fallback locations:", err, err2);
+      console.error(
+        "Failed to create uploads directory in both preferred and fallback locations:",
+        err,
+        err2
+      );
       throw err2;
     }
   }
@@ -36,7 +42,9 @@ function getEntityDir(name) {
 function ensureUploadDirectoriesExist() {
   try {
     const root = resolveUploadsRoot();
-    const dirs = ["brands", "categories", "products", "banners"].map((d) => path.join(root, d));
+    const dirs = ["brands", "categories", "products", "banners"].map((d) =>
+      path.join(root, d)
+    );
     dirs.forEach((dir) => {
       try {
         fs.mkdirSync(dir, { recursive: true });
@@ -47,7 +55,10 @@ function ensureUploadDirectoriesExist() {
     });
   } catch (err) {
     // If resolveUploadsRoot threw, log and continue — callers should be robust to missing dirs.
-    console.warn("ensureUploadDirectoriesExist: could not ensure uploads directories:", err.message || err);
+    console.warn(
+      "ensureUploadDirectoriesExist: could not ensure uploads directories:",
+      err.message || err
+    );
   }
 }
 
@@ -55,7 +66,9 @@ function getNextSerialNumberForDir(targetDir) {
   // Try to ensure directories exist but don't throw if it fails
   ensureUploadDirectoriesExist();
   try {
-    const files = fs.readdirSync(targetDir).filter((f) => !fs.statSync(path.join(targetDir, f)).isDirectory());
+    const files = fs
+      .readdirSync(targetDir)
+      .filter((f) => !fs.statSync(path.join(targetDir, f)).isDirectory());
     let maxSerial = 0;
     files.forEach((file) => {
       const base = path.parse(file).name; // e.g., "12" from "12.jpg"
@@ -111,5 +124,3 @@ module.exports = {
     banners: () => getEntityDir("banners"),
   },
 };
-
-
