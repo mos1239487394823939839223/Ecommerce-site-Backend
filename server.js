@@ -21,8 +21,9 @@ const userRoute = require("./routes/userRoute");
 
 dotenv.config({ path: "config.env" });
 
-// connect with database
-dbConnection();
+// Note: for serverless environments we should avoid starting a long-lived listener
+// or connecting to the DB automatically at import time. We only connect and
+// start the listener when this file is run directly (node server.js).
 
 // express app
 const app = express();
@@ -96,15 +97,31 @@ app.all(/.*/, (req, res, next) => {
 app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, () => {
-  console.log(`The app is running on port ${PORT}`);
-});
 
-// unhandled rejection error outside express
-process.on("unhandledRejection", (err) => {
-  console.error(`Unhandled Rejection Error: ${err.name} : ${err.message}`);
-  console.error(`Shutting down the server...`);
-  server.close(() => {
-    process.exit(1);
-  });
-});
+// If this module is run directly (node server.js), start the server and connect DB.
+if (require.main === module) {
+  (async () => {
+    try {
+      await dbConnection();
+    } catch (err) {
+      console.error("Failed to connect to DB. Exiting.", err);
+      process.exit(1);
+    }
+
+    const server = app.listen(PORT, () => {
+      console.log(`The app is running on port ${PORT}`);
+    });
+
+    // unhandled rejection error outside express
+    process.on("unhandledRejection", (err) => {
+      console.error(`Unhandled Rejection Error: ${err.name} : ${err.message}`);
+      console.error(`Shutting down the server...`);
+      server.close(() => {
+        process.exit(1);
+      });
+    });
+  })();
+}
+
+// Export the app for testing or to be imported by serverless wrappers
+module.exports = app;
